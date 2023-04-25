@@ -147,29 +147,36 @@ public class registerPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBTNActionPerformed
-        String username = usernameTextField.getText();
-        String password = passwordTextField.getText();
-        String passwordHash = String.valueOf(password.hashCode());
-        System.out.println(passwordHash);
-        String userType = (String)userSelector.getSelectedItem();
-        System.out.println(userType);
-        
         try {
-            Statement stmt = DBConnector.connection.createStatement();
-            
-            String sql = "INSERT INTO `users`(`username`, `password`, `user_type`) VALUES ('"+username+"','"+passwordHash+"','"+userType+"')";
-            stmt.execute(sql);
-            
-        } catch (Exception ex) {
-            System.out.println(ex);
+            String username = usernameTextField.getText();
+            String password = passwordTextField.getText();
+            String passwordHash = String.valueOf(password.hashCode());
+            System.out.println(passwordHash);
+            String userType = (String)userSelector.getSelectedItem();
+            System.out.println(userType);
+
+            if (username.isEmpty() && password.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Username dan Password Tidak Boleh Kosong!", "Caution!", JOptionPane.WARNING_MESSAGE);
+            }
+            else if(username.isEmpty()){
+                JOptionPane.showMessageDialog(null, "Password Tidak Boleh Kosong!", "Caution!", JOptionPane.WARNING_MESSAGE);
+            }      
+            else if(password.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Password Tidak Boleh Kosong!", "Caution!", JOptionPane.WARNING_MESSAGE);
+            }
+            else {
+                String sql = "INSERT INTO `users`(`username`, `password`, `user_type`) VALUES ('"+username+"','"+passwordHash+"','"+userType+"')";
+                Statement stmt = DBConnector.connection.createStatement();
+                stmt.execute(sql);
+                usernameTextField.setText(null);
+                passwordTextField.setText(null);
+                JOptionPane.showMessageDialog(null, "Pembuatan akun berhasil!", "Caution!", JOptionPane.INFORMATION_MESSAGE);
+                new loginPage().setVisible(true);
+                this.dispose();    
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        
-        usernameTextField.setText(null);
-        passwordTextField.setText(null);
-        
-        JOptionPane.showMessageDialog(null, "Pembuatan akun berhasil!", "Caution!", JOptionPane.INFORMATION_MESSAGE);
-        new loginPage().setVisible(true);
-        this.dispose();
         
     }//GEN-LAST:event_registerBTNActionPerformed
 
