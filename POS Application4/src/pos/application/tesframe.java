@@ -445,12 +445,21 @@ public class tesframe extends javax.swing.JFrame {
     private void kodeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kodeTextFieldActionPerformed
         String kode = kodeTextField.getText();
         String nama = "";
+        
+        try {
+            int check = Integer.parseInt(kode);
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "Kode tidak boleh huruf!", "Caution!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         float harga;
         float total;
         float hargaInv;
         float totalInv;
+       
 
-        try {
+        try {            
             Statement stmt = DBConnector.connection.createStatement();
             String sql = "select * from barang where kode='"+kode+"'";
             ResultSet rs = stmt.executeQuery(sql);
